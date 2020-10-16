@@ -3,7 +3,7 @@ from transformers import BartTokenizer, BartForConditionalGeneration
 from seq2seq_trainer import *
 import torch
 from torch.utils.data import Dataset, DataLoader
-import config
+from config import *
 
 data = None
 
