@@ -74,5 +74,5 @@ for i in range(0, 35):
 
 
     inputs = tokenizer([inp_text], max_length=1024, return_tensors='pt').to('cuda')
-    outputs = model.generate(inputs['input_ids'], num_beams=10, max_length=35, early_stopping=True)
+    outputs = model.generate(inputs['input_ids'], num_beams=20, max_length=35, early_stopping=True)
     print('Generated: {}'.format(tokenizer.decode(outputs[0], skip_special_tokens=True)))
