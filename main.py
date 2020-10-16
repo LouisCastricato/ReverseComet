@@ -21,6 +21,7 @@ class ReverseCometDataset(Dataset):
 
         self.data = data
         self.keys = data.keys()
+        print(self.keys)
         self.tokenizer = tokenizer 
 
     def __len__(self):
