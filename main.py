@@ -20,8 +20,7 @@ class ReverseCometDataset(Dataset):
     def __init__(self, data, tokenizer):
 
         self.data = data
-        self.keys = data.keys()
-        print(self.keys)
+        self.keys = list(data.keys())
         self.tokenizer = tokenizer 
 
     def __len__(self):
