@@ -40,7 +40,7 @@ model_name = 'facebook/bart-base'
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
-model = BartForConditionalGeneration.from_pretrained("./result/checkpoint-8500/")
+model = BartForConditionalGeneration.from_pretrained(model_name)
 
 #Add the tokens above
 tokenizer.add_tokens(list(special_tokens_dict.values()))
@@ -61,11 +61,12 @@ trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
     data_collator=Seq2SeqDataCollator(tokenizer, data_args, 4))
 
 print(tokenizer.pretrained_vocab_files_map)
-'''
+
 trainer.train(
     model_path="output.model"
 )
 trainer.save_model()
+
 '''
 for i in range(0, 35):
     print(list(data["test"].keys())[i])
@@ -78,6 +79,6 @@ for i in range(0, 35):
     outputs = model.generate(inputs['input_ids'], num_beams=20, max_length=35,\
         early_stopping=True, repetition_penalty=2.0, bad_words_ids=[[50278]],\
         no_repeat_ngram_size=4)
-    print(outputs[0])
-    sys,exit()
+
     print('Generated: {}'.format(tokenizer.decode(outputs[0], skip_special_tokens=True)))
+'''
