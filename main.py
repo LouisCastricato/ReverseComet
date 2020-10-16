@@ -14,7 +14,7 @@ with open('data.json') as json_file:
 special_tokens_dict = {'xAttr': '<xAttr>', 'xEffect': '<xEffect>', 'xIntent': '<xIntent>',\
     'xNeed' : '<xNeed>', 'xReact' : '<xReact>', 'xWant' : '<xWant>', 'oEffect' : '<oEffect>',\
     'oReact' : '<oReact>', 'oWant' : '<oWant>', 'Event' : '<Event>', 'personx' : 'PersonX',\
-    'persony' : 'PersonY', 'personz' : 'PersonZ'}
+    'persony' : 'PersonY', 'personz' : 'PersonZ', 'blank' : '<blank>'}
 
 class ReverseCometDataset(Dataset):
     def __init__(self, data, tokenizer):
