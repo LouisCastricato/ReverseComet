@@ -30,8 +30,10 @@ class ReverseCometDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        text = self.tokenizer(self.data[self.keys[idx]], return_tensors="pt")
-        label = self.tokenizer(self.keys[idx], return_tensors="pt")
+        text = self.tokenizer(self.data[self.keys[idx]], return_tensors="pt").to('cuda')
+        label = self.tokenizer(self.keys[idx], return_tensors="pt").to('cuda')
+        print(text)
+        attention_mask = torch.ones(len(text)).to('cuda')
         sample = {'input_ids': text, 'labels': label}
 
         return sample
@@ -55,7 +57,8 @@ test_dataset = ReverseCometDataset(data["test"], tokenizer)
 training_args = Seq2SeqTrainingArguments()
 data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
-    train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args)
+    train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
+    data_collator=Seq2SeqDataCollator(tokenizer, data_args, 0))
 
 trainer.train(
     model_path="output.model"
