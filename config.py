@@ -44,6 +44,7 @@ class Seq2SeqTrainingArguments(TrainingArguments):
         self.attention_dropout = None
         self.lr_scheduler = "linear"
         self.output_dir = "./result"
+        self.logging_dir = "./logging"
 @dataclass
 class DataTrainingArguments:
     """
