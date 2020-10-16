@@ -71,8 +71,8 @@ for i in range(0, 35):
     print(list(data["test"].keys())[i])
     print(list(data["test"].values())[i])
     inp_text = list(data["test"].keys())[i]
-    #print(tokenizer.encode("<blank>", add_prefix_space=True))
-
+    print(tokenizer.encode(" <blank> ", add_prefix_space=True))
+    sys.exit()
     inputs = tokenizer([inp_text], max_length=1024, return_tensors='pt').to('cuda')
     outputs = model.generate(inputs['input_ids'], num_beams=20, max_length=35,\
         early_stopping=True, repetition_penalty=2.0, bad_words_ids=[[len(tokenizer)-1]],\
