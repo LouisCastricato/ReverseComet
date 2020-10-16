@@ -73,8 +73,7 @@ for i in range(0, 35):
     #print(tokenizer.encode(list(data["test"].keys())[i]))
     #sys.exit()
     inputs = tokenizer([inp_text], max_length=1024, return_tensors='pt').to('cuda')
-    outputs = model.generate(inputs['input_ids'], num_beams=20, max_length=35,\
-        early_stopping=True, repetition_penalty=2.0, bad_words_ids=[[50278]],\
-        no_repeat_ngram_size=4)
+    outputs = model.generate(inputs['input_ids'], num_beams=30, max_length=35,\
+        early_stopping=True, repetition_penalty=2.0, bad_words_ids=[tokenizer.encode('<blank>', add_prefix_space=False)])
 
     print('Generated: {}'.format(tokenizer.decode(outputs[0], skip_special_tokens=True)))
