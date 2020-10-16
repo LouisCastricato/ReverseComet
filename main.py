@@ -40,7 +40,7 @@ model_name = 'facebook/bart-base'
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
-model = BartForConditionalGeneration.from_pretrained(model_name)
+model = BartForConditionalGeneration.from_pretrained('./result/')
 
 #Add the tokens above
 tokenizer.add_tokens(list(special_tokens_dict.values()))
@@ -53,18 +53,17 @@ eval_dataset = ReverseCometDataset(data["dev"], tokenizer)
 test_dataset = ReverseCometDataset(data["test"], tokenizer)
 
 training_args = Seq2SeqTrainingArguments()
-training_args.per_device_train_batch_size = 10
+training_args.per_device_train_batch_size = 4
 
 data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
     train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
     data_collator=Seq2SeqDataCollator(tokenizer, data_args, 4))
-
+'''
 trainer.train(
     model_path="output.model"
 )
 trainer.save_model()
-
 '''
 for i in range(0, 35):
     print(list(data["test"].keys())[i])
@@ -79,4 +78,3 @@ for i in range(0, 35):
         no_repeat_ngram_size=4)
 
     print('Generated: {}'.format(tokenizer.decode(outputs[0], skip_special_tokens=True)))
-'''
