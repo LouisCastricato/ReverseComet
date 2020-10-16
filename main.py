@@ -32,7 +32,7 @@ class ReverseCometDataset(Dataset):
 
         text = self.tokenizer(self.data[self.keys[idx]], return_tensors="pt")
         label = self.tokenizer(self.keys[idx], return_tensors="pt")
-        sample = {'text': text, 'labels': label}
+        sample = {'input_ids': text, 'labels': label}
 
         return sample
 
@@ -59,6 +59,6 @@ trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
 
 
 
-inputs = tokenizer("Hello, my dog is cute", return_tensors="tf")
+inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
 outputs = model(inputs)
 logits = outputs[0]
