@@ -60,8 +60,6 @@ trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
     train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
     data_collator=Seq2SeqDataCollator(tokenizer, data_args, 4))
 
-print(tokenizer.pretrained_vocab_files_map)
-
 trainer.train(
     model_path="output.model"
 )
