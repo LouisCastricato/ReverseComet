@@ -70,7 +70,9 @@ trainer.save_model()
 for i in range(0, 35):
     print(list(data["test"].keys())[i])
     print(list(data["test"].values())[i])
+    inp_text = list(data["test"].keys())[i]
 
-    inputs = tokenizer([list(data["test"].values())[0]], max_length=1024, return_tensors='pt').to('cuda')
-    outputs = model.generate(inputs['input_ids'], num_beams=4, max_length=35, early_stopping=True)
+
+    inputs = tokenizer([inp_text], max_length=1024, return_tensors='pt').to('cuda')
+    outputs = model.generate(inputs['input_ids'], num_beams=10, max_length=35, early_stopping=True)
     print('Generated: {}'.format(tokenizer.decode(outputs[0], skip_special_tokens=True)))
