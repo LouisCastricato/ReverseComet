@@ -40,7 +40,7 @@ model_name = 'facebook/bart-base'
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
-model = BartForConditionalGeneration.from_pretrained(model_name)
+model = BartForConditionalGeneration.from_pretrained("./result/checkpoint-8500/")
 
 #Add the tokens above
 tokenizer.add_tokens(special_tokens_dict.values())
@@ -60,13 +60,16 @@ trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
     train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
     data_collator=Seq2SeqDataCollator(tokenizer, data_args, 4))
 
+
+'''
 trainer.train(
     model_path="output.model"
 )
 trainer.save_model()
 '''
-inputs = tokenizer(["Hello, my dog is cute"], max_length=1024, return_tensors='pt').to('cuda')
-print(inputs)
-outputs = model.generate(inputs['input_ids'], num_beams=4, max_length=5, early_stopping=True)
-logits = outputs[0]
-'''
+print(list(data["test"].keys())[0])
+print(list(data["test"].values())[0])
+
+inputs = tokenizer([list(data["test"].values())[0]], max_length=1024, return_tensors='pt').to('cuda')
+outputs = model.generate(inputs['input_ids'], num_beams=4, max_length=35, early_stopping=True)
+print('Generated: {}'.format(tokenizer.decode(outputs[0], skip_special_tokens=True)))
