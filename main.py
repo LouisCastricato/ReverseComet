@@ -56,7 +56,7 @@ training_args = Seq2SeqTrainingArguments()
 data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
     train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
-    data_collator=Seq2SeqDataCollator(tokenizer, data_args, 0))
+    data_collator=Seq2SeqDataCollator(tokenizer, data_args, 1))
 
 trainer.train(
     model_path="output.model"
