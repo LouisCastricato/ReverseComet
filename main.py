@@ -78,4 +78,6 @@ for i in range(0, 35):
     outputs = model.generate(inputs['input_ids'], num_beams=20, max_length=35,\
         early_stopping=True, repetition_penalty=2.0, bad_words_ids=[[50278]],\
         no_repeat_ngram_size=4)
+    print(outputs[0])
+    sys,exit()
     print('Generated: {}'.format(tokenizer.decode(outputs[0], skip_special_tokens=True)))
