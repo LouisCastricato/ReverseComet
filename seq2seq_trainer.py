@@ -21,11 +21,6 @@ from transformers.optimization import (
 from transformers.trainer_pt_utils import get_tpu_sampler
 
 
-try:
-    from .utils import label_smoothed_nll_loss
-except ImportError:
-    from utils import label_smoothed_nll_loss
-
 
 logger = logging.getLogger(__name__)
 
@@ -121,16 +116,12 @@ class Seq2SeqTrainer(Trainer):
         return self._compute_loss(logits, labels)
 
     def _compute_loss(self, logits, labels):
-        if self.args.label_smoothing == 0:
-            # Same behavior as modeling_bart.py
-            loss_fct = torch.nn.CrossEntropyLoss(ignore_index=self.config.pad_token_id)
-            assert logits.shape[-1] == self.vocab_size
-            loss = loss_fct(logits.view(-1, logits.shape[-1]), labels.view(-1))
-        else:
-            lprobs = torch.nn.functional.log_softmax(logits, dim=-1)
-            loss, nll_loss = label_smoothed_nll_loss(
-                lprobs, labels, self.args.label_smoothing, ignore_index=self.config.pad_token_id
-            )
+
+        # Same behavior as modeling_bart.py
+        loss_fct = torch.nn.CrossEntropyLoss(ignore_index=self.config.pad_token_id)
+        assert logits.shape[-1] == self.vocab_size
+        loss = loss_fct(logits.view(-1, logits.shape[-1]), labels.view(-1))
+
         return loss
 
     def prediction_step(
