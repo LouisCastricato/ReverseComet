@@ -43,7 +43,7 @@ tokenizer =  BartTokenizer.from_pretrained(model_name)
 model = BartForConditionalGeneration.from_pretrained("./result/checkpoint-8500/")
 
 #Add the tokens above
-tokenizer.add_tokens(special_tokens_dict.values())
+tokenizer.add_tokens(list(special_tokens_dict.values()))
 model.resize_token_embeddings(len(tokenizer))
 
 #Set up datasets
