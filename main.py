@@ -66,9 +66,9 @@ trainer.train(
 trainer.save_model()
 '''
 for i in range(0, 35):
-    print(list(data["test"].keys())[i])
-    print(list(data["test"].values())[i])
-    inp_text = list(data["test"].keys())[i]
+    print(list(data["dev"].keys())[i])
+    print(list(data["dev"].values())[i])
+    inp_text = list(data["dev"].keys())[i]
     #print(tokenizer.encode('<blank>', add_prefix_space=False))
     #print(tokenizer.encode(list(data["test"].keys())[i]))
     #sys.exit()
