@@ -59,6 +59,6 @@ trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
 
 
 
-inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
-outputs = model(inputs)
+inputs = tokenizer(["Hello, my dog is cute"], max_length=1024, return_tensors='pt')
+outputs = model.generate(inputs['input_ids'], num_beams=4, max_length=5, early_stopping=True)
 logits = outputs[0]
