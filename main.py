@@ -57,9 +57,13 @@ data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
     train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args)
 
-
-
+trainer.train(
+    model_path="output.model"
+)
+trainer.save_model()
+'''
 inputs = tokenizer(["Hello, my dog is cute"], max_length=1024, return_tensors='pt').to('cuda')
 print(inputs)
 outputs = model.generate(inputs['input_ids'], num_beams=4, max_length=5, early_stopping=True)
 logits = outputs[0]
+'''
