@@ -36,7 +36,7 @@ class ReverseCometDataset(Dataset):
 
         return sample
 
-model_name = 'facebook/bart-large'
+model_name = 'facebook/bart-base'
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
