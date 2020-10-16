@@ -32,9 +32,7 @@ class ReverseCometDataset(Dataset):
 
         text = self.tokenizer(self.data[self.keys[idx]], return_tensors="pt").to('cuda')
         label = self.tokenizer(self.keys[idx], return_tensors="pt").to('cuda')
-        print(text)
-        attention_mask = torch.ones(len(text)).to('cuda')
-        sample = {'input_ids': text, 'labels': label}
+        sample = {'src_texts': text['input_ids'], 'attention_mask': text['attention_mask'], 'tgt_texts': label}
 
         return sample
 
