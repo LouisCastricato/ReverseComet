@@ -53,7 +53,7 @@ eval_dataset = ReverseCometDataset(data["dev"], tokenizer)
 test_dataset = ReverseCometDataset(data["test"], tokenizer)
 
 training_args = Seq2SeqTrainingArguments()
-training_args.per_device_train_batch_size = 4
+training_args.per_device_train_batch_size = 6
 
 data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
