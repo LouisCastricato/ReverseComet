@@ -43,7 +43,7 @@ tokenizer =  BartTokenizer.from_pretrained(model_name)
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
 #Add the tokens above
-tokenizer.add_special_tokens(special_tokens_dict)
+tokenizer.add_tokens(special_tokens_dict.values())
 model.resize_token_embeddings(len(tokenizer))
 
 #Set up datasets
