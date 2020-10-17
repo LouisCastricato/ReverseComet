@@ -61,7 +61,7 @@ model_name = 'facebook/bart-base'
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
-model = BartForConditionalGeneration.from_pretrained('./result/')
+model = BartForConditionalGeneration.from_pretrained(model_name)
 
 #Add the tokens above
 tokenizer.add_tokens(list(special_tokens_dict.values()))
