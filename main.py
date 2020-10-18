@@ -39,7 +39,7 @@ class ReverseCometDataset(Dataset):
             idx = idx.tolist()
         tgt = self.keys[idx]
         src = self.data[tgt]
-
+        '''
         start_ids = findOccurrences(src, "<")
         clause = list()
         for i,idx in enumerate(start_ids):
@@ -50,7 +50,7 @@ class ReverseCometDataset(Dataset):
         random.shuffle(clause)
         clause = list(map(lambda x: x + " ", clause))
         src = foldl(operator.add, "", clause)
-
+        '''
         #text = self.tokenizer(self.data[self.keys[idx]], return_tensors="pt").to('cuda')
         #label = self.tokenizer(self.keys[idx], return_tensors="pt").to('cuda')
         sample = {'src_texts': src, 'tgt_texts': tgt}
