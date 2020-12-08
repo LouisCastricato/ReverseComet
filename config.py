@@ -56,7 +56,7 @@ class DataTrainingArguments:
         self.data_dir = ""
         self.task = "summarization"
         self.max_source_length = 1024
-        self.max_target_length  = 128
+        self.max_target_length  = 256
         self.val_max_target_length  = 142
         self.test_max_target_length = 142
         self.n_train  = -1
