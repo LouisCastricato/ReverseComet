@@ -33,7 +33,7 @@ class ReverseCometDataset(Dataset):
     def __len__(self):
         if self.p_type == 'train':
             return len(data['train']['text'])
-        elif self.p_type == 'validation'
+        elif self.p_type == 'validation':
             return len(data['validation']['text'])
 
     def __getitem__(self, idx):
