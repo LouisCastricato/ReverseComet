@@ -5,7 +5,6 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from config import *
 import random
-from datasets import load_dataset
 from nltk.tokenize import sent_tokenize
 import numpy.random
 import csv
@@ -38,7 +37,7 @@ class ReverseCometDataset(Dataset):
             idx = idx.tolist()
         
         tgt = self.data[idx][1]
-        src = self.data[idx][0][:-len(" <pmpt> ")]
+        src = self.data[idx][0][:len(" <pmpt> ")]
 
         sample = {'src_texts': src, 'tgt_texts': tgt}
 
@@ -60,7 +59,7 @@ eval_dataset = ReverseCometDataset(tokenizer, "validation")
 
 training_args = Seq2SeqTrainingArguments()
 #training_args.max_steps *= 3
-training_args.per_device_train_batch_size = 10
+training_args.per_device_train_batch_size = 5
 
 data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
