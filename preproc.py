@@ -30,7 +30,7 @@ def preproc(inp):
     return [src, tgt]
 
 pool = multiprocessing.Pool(processes=8)
-train = pd.DataFrame(pool.map(preproc, data['train']['text'][0:100]))
+train = pd.DataFrame(pool.map(preproc, data['train']['text']))
 train.to_csv('train.csv', index=False, header=False)
 
 print("SAVED TRAINING SET")
