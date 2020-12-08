@@ -8,11 +8,9 @@ import random
 from datasets import load_dataset
 from nltk.tokenize import sent_tokenize
 import numpy.random
+import csv
 
 data = None
-
-with open('data.json') as json_file: 
-    data = json.load(json_file)
 
 import functools
 import operator
@@ -26,57 +24,26 @@ def findOccurrences(s, ch):
 
 class ReverseCometDataset(Dataset):
     def __init__(self, tokenizer, p_type = 'train'):
+        with open(p_type + ".csv", "r") as f:
+            self.data = list(csv.reader(f))
 
         self.p_type = p_type
         self.tokenizer = tokenizer 
 
     def __len__(self):
-        if self.p_type == 'train':
-            return len(data['train']['text'])
-        elif self.p_type == 'validation':
-            return len(data['validation']['text'])
+        return len(self.data)
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
-        #Tokenize and cut off the last ten sentences
-        if self.p_type == 'train':
-            txt = sent_tokenize(data['train']['text'][idx])[:-10]
-        #Tokenize and cut off the last ten sentences
-        elif self.p_type == 'validation':
-            txt = sent_tokenize(data['validation']['text'][idx])[:-10]
+        
+        tgt = self.data[idx][1]
+        src = self.data[idx][0]
 
-        n_sent = len(txt)
-        n_start = np.random.randint(low = min(10, n_sent), high = n_sent)
-        n_length = np.random.randint(low = min(3, n_sent), high = min(15, n_sent))
-        n_prompt = np.random.randint(low = 1, high = 3)
-
-        exmpl = txt[n_start - n_length:n_start + 1]
-        body = " ".join(exmpl[n_prompt:])
-        prompt = " ".join(exmpl[:n_prompt])
-
-        tgt = prompt
-        src = body + " <pmpt> "
-        '''
-        start_ids = findOccurrences(src, "<")
-        clause = list()
-        for i,idx in enumerate(start_ids):
-            if i == len(start_ids) - 1:
-                clause.append(src[idx:])
-                break
-            clause.append(src[idx:start_ids[i+1] - 1])
-        random.shuffle(clause)
-        clause = list(map(lambda x: x + " ", clause))
-        src = foldl(operator.add, "", clause)
-        '''
-        #text = self.tokenizer(self.data[self.keys[idx]], return_tensors="pt").to('cuda')
-        #label = self.tokenizer(self.keys[idx], return_tensors="pt").to('cuda')
         sample = {'src_texts': src, 'tgt_texts': tgt}
 
         return sample
 model_name = 'facebook/bart-base'
-
-data = load_dataset("pg19", cache_dir = "cache/")
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
