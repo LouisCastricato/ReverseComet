@@ -12,7 +12,7 @@ val = list()
 
 def preproc(inp):
     try:
-        txt = sent_tokenize(inp)[:-30]
+        txt = sent_tokenize(inp)[30:-30]
         n_sent = len(txt)
         n_start = np.random.randint(low = min(10, n_sent), high = n_sent)
         n_length = np.random.randint(low = min(3, n_sent), high = min(15, n_sent))
