@@ -68,7 +68,7 @@ class ReverseCometDataset(Dataset):
         return sample
 model_name = 'facebook/bart-base'
 
-data = load_dataset("pg19")
+data = load_dataset("pg19", cache_dir = "cache/")
 
 train = data['train']['text']
 dev = data['validation']['text']
