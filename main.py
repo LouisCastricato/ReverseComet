@@ -8,6 +8,8 @@ import random
 from nltk.tokenize import sent_tokenize
 import numpy.random
 import csv
+import argparse
+import os
 
 data = None
 
@@ -47,6 +49,12 @@ model_name = 'facebook/bart-large'
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
 model = BartForConditionalGeneration.from_pretrained(model_name)
+
+#Model args, should enable fp16
+parser = argparse.ArgumentParser()
+parser = model.add_model_specific_args(parser, os.getcwd())
+args = parser.parse_args()
+
 
 #Add the tokens above
 tokenizer.add_tokens(list(special_tokens_dict.values()))
