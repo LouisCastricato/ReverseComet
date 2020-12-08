@@ -5,6 +5,9 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from config import *
 import random
+from datasets import load_dataset
+from nltk.tokenize import sent_tokenize
+import numpy.random
 
 data = None
 
@@ -16,10 +19,7 @@ import operator
 foldl = lambda func, acc, xs: functools.reduce(func, xs, acc)
 
 
-special_tokens_dict = {'xAttr': '<xAttr>', 'xEffect': '<xEffect>', 'xIntent': '<xIntent>',\
-    'xNeed' : '<xNeed>', 'xReact' : '<xReact>', 'xWant' : '<xWant>', 'oEffect' : '<oEffect>',\
-    'oReact' : '<oReact>', 'oWant' : '<oWant>', 'Event' : '<Event>', 'personx' : 'PersonX',\
-    'persony' : 'PersonY', 'personz' : 'PersonZ', 'blank' : '<blank>'}
+special_tokens_dict = {'prompt' : '<pmpt>'}
 
 def findOccurrences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
@@ -28,7 +28,6 @@ class ReverseCometDataset(Dataset):
     def __init__(self, data, tokenizer):
 
         self.data = data
-        self.keys = list(data.keys())
         self.tokenizer = tokenizer 
 
     def __len__(self):
@@ -37,8 +36,19 @@ class ReverseCometDataset(Dataset):
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
-        tgt = self.keys[idx]
-        src = self.data[tgt]
+        #Tokenize and cut off the last ten sentences
+        txt = sent_tokenize(self.data[idx])[:-10]
+        n_sent = len(txt)
+        n_start = np.random.randint(low = min(10, n_sent), high = n_sent)
+        n_length = np.random.randint(low = min(3, n_sent), high = min(15, n_sent))
+        n_prompt = np.random.randint(low = 1, high = 3)
+
+        exmpl = txt[n_start - n_length:n_start + 1]
+        body = " ".join(exmpl[n_prompt:])
+        prompt = " ".join(exmpl[:n_prompt])
+
+        tgt = prompt
+        src = body + " <pmpt> "
         '''
         start_ids = findOccurrences(src, "<")
         clause = list()
@@ -56,8 +66,12 @@ class ReverseCometDataset(Dataset):
         sample = {'src_texts': src, 'tgt_texts': tgt}
 
         return sample
-
 model_name = 'facebook/bart-base'
+
+data = load_dataset("pg19")
+
+train = data['train']['text']
+dev = data['validation']['text']
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
@@ -69,9 +83,8 @@ model.resize_token_embeddings(len(tokenizer))
 
 #Set up datasets
 config = model.config
-train_dataset = ReverseCometDataset(data["train"], tokenizer)
-eval_dataset = ReverseCometDataset(data["dev"], tokenizer)
-test_dataset = ReverseCometDataset(data["test"], tokenizer)
+train_dataset = ReverseCometDataset(train, tokenizer)
+eval_dataset = ReverseCometDataset(dev, tokenizer)
 
 training_args = Seq2SeqTrainingArguments()
 #training_args.max_steps *= 3
