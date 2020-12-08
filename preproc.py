@@ -20,8 +20,8 @@ def preproc(inp):
         n_prompt = np.random.randint(low = 1, high = 3)
 
         exmpl = txt[n_start - n_length:n_start + 1]
-        body = " ".join(exmpl[n_prompt:])
-        prompt = " ".join(exmpl[:n_prompt])
+        body = " ".join(exmpl[n_prompt:]).replace("\n", " ")
+        prompt = " ".join(exmpl[:n_prompt]).replace("\n", " ")
 
         tgt = prompt
         src = body + " <pmpt> "
