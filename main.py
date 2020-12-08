@@ -42,7 +42,7 @@ class ReverseCometDataset(Dataset):
         sample = {'src_texts': src, 'tgt_texts': tgt}
 
         return sample
-model_name = 'facebook/bart-base'
+model_name = 'facebook/bart-large'
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
@@ -59,7 +59,7 @@ eval_dataset = ReverseCometDataset(tokenizer, "validation")
 
 training_args = Seq2SeqTrainingArguments()
 #training_args.max_steps *= 3
-training_args.per_device_train_batch_size = 5
+training_args.per_device_train_batch_size = 2
 
 data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
