@@ -12,7 +12,7 @@ val = list()
 
 def preproc(inp):
     try:
-        txt = sent_tokenize(inp)[30:-30]
+        txt = sent_tokenize(inp)[10:-30]
         n_sent = len(txt)
         n_start = np.random.randint(low = min(10, n_sent), high = n_sent)
         n_length = np.random.randint(low = min(3, n_sent), high = min(15, n_sent))
@@ -28,9 +28,11 @@ def preproc(inp):
         tgt = "None"
         src = "None"
     return [src, tgt]
+#Double up the lists, since its randomly sampled we should get zero overlap
+train_input = data['train']['text'] + data['train']['text']
 
 pool = multiprocessing.Pool(processes=8)
-train = pd.DataFrame(pool.map(preproc, data['train']['text']))
+train = pd.DataFrame(pool.map(preproc, train_input))
 train.to_csv('train.csv', index=False, header=False)
 
 print("SAVED TRAINING SET")
