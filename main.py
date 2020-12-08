@@ -70,9 +70,6 @@ model_name = 'facebook/bart-base'
 
 data = load_dataset("pg19", cache_dir = "cache/")
 
-train = data['train']['text']
-dev = data['validation']['text']
-
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
 model = BartForConditionalGeneration.from_pretrained(model_name)
@@ -83,8 +80,9 @@ model.resize_token_embeddings(len(tokenizer))
 
 #Set up datasets
 config = model.config
-train_dataset = ReverseCometDataset(train, tokenizer)
-eval_dataset = ReverseCometDataset(dev, tokenizer)
+train_dataset = ReverseCometDataset(data['train']['text'], tokenizer)
+eval_dataset = ReverseCometDataset(data['validation']['text'], tokenizer)
+del data
 
 training_args = Seq2SeqTrainingArguments()
 #training_args.max_steps *= 3
