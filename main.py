@@ -25,9 +25,9 @@ def findOccurrences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
 
 class ReverseCometDataset(Dataset):
-    def __init__(self, data, tokenizer):
+    def __init__(self, tokenizer, p_type = 'train'):
 
-        self.data = data
+        self.p_type = p_type
         self.tokenizer = tokenizer 
 
     def __len__(self):
@@ -37,7 +37,12 @@ class ReverseCometDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
         #Tokenize and cut off the last ten sentences
-        txt = sent_tokenize(self.data[idx])[:-10]
+        if self.p_type == 'train':
+            txt = sent_tokenize(data['train']['text'][idx])[:-10]
+        #Tokenize and cut off the last ten sentences
+        if self.p_type == 'validation':
+            txt = sent_tokenize(data['validation']['text'][idx])[:-10]
+
         n_sent = len(txt)
         n_start = np.random.randint(low = min(10, n_sent), high = n_sent)
         n_length = np.random.randint(low = min(3, n_sent), high = min(15, n_sent))
@@ -80,9 +85,8 @@ model.resize_token_embeddings(len(tokenizer))
 
 #Set up datasets
 config = model.config
-train_dataset = ReverseCometDataset(data['train']['text'], tokenizer)
-eval_dataset = ReverseCometDataset(data['validation']['text'], tokenizer)
-del data
+train_dataset = ReverseCometDataset(tokenizer)
+eval_dataset = ReverseCometDataset(tokenizer, "validation")
 
 training_args = Seq2SeqTrainingArguments()
 #training_args.max_steps *= 3
