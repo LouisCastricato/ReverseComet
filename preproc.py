@@ -11,10 +11,9 @@ train = list()
 val = list()
 
 def preproc(inp):
-    txt = sent_tokenize(inp)[:-10]
-
-    n_sent = len(txt)
     try:
+        txt = sent_tokenize(inp)[:-30]
+        n_sent = len(txt)
         n_start = np.random.randint(low = min(10, n_sent), high = n_sent)
         n_length = np.random.randint(low = min(3, n_sent), high = min(15, n_sent))
         n_prompt = np.random.randint(low = 1, high = 3)
