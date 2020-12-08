@@ -31,7 +31,10 @@ class ReverseCometDataset(Dataset):
         self.tokenizer = tokenizer 
 
     def __len__(self):
-        return len(self.data)
+        if self.p_type == 'train':
+            return len(data['train']['text'])
+        elif self.p_type == 'validation'
+            return len(data['validation']['text'])
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
@@ -40,7 +43,7 @@ class ReverseCometDataset(Dataset):
         if self.p_type == 'train':
             txt = sent_tokenize(data['train']['text'][idx])[:-10]
         #Tokenize and cut off the last ten sentences
-        if self.p_type == 'validation':
+        elif self.p_type == 'validation':
             txt = sent_tokenize(data['validation']['text'][idx])[:-10]
 
         n_sent = len(txt)
