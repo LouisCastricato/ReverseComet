@@ -30,9 +30,9 @@ def preproc(inp):
     return [src, tgt]
 
 pool = multiprocessing.Pool(processes=8)
-train = pool.map(preproc, data['train']['text'][0:100])
+train = pool.map(preproc, data['train']['text'])
 print(train)
-sys.exit()
+
 
 with open("train.csv", "wb") as f:
     writer = csv.writer(f)
