@@ -4,10 +4,10 @@ import numpy as np
 import csv
 from tqdm import tqdm
 import multiprocessing
+import pandas as pd
 
 data = load_dataset("pg19", cache_dir= "cache/")
 
-train = list()
 val = list()
 
 def preproc(inp):
@@ -30,22 +30,13 @@ def preproc(inp):
     return [src, tgt]
 
 pool = multiprocessing.Pool(processes=8)
-train = pool.map(preproc, data['train']['text'])
-print(train)
-
-
-with open("train.csv", "wb") as f:
-    writer = csv.writer(f)
-    writer.writerows(train)
+train = pd.DataFrame(pool.map(preproc, data['train']['text'][0:100]))
+train.to_csv('train.csv', index=False, header=False)
 
 print("SAVED TRAINING SET")
 
-val = pool.map(preproc, data['validation']['text'])
-
-
-with open("validation.csv", "wb") as f:
-    writer = csv.writer(f)
-    writer.writerows(val)
+val = pd.DataFrame(pool.map(preproc, data['validation']['text']))
+val.to_csv('validation.csv', index=False, header=False)
 
 print("SAVED EVAL SET")
 
