@@ -47,7 +47,7 @@ class ReverseCometDataset(Dataset):
 
 #Model args, should enable fp16
 parser = argparse.ArgumentParser()
-parser.add_argument("--eval", action="store_false")
+parser.add_argument("--eval", action="store_true", default=False)
 #If this is not bart-base or bart-large, assume load from file
 parser.add_argument("--model", type=str, default="facebook/bart-base")
 parser.add_argument("--eval_file", type=str, default="query.txt")
