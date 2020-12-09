@@ -39,7 +39,11 @@ train.to_csv('train.csv', index=False, header=False)
 
 print("SAVED TRAINING SET")
 
-val = pd.DataFrame(pool.map(preproc, data['validation']['text']))
+val_input = data['validation']['text']
+for i in range(5):
+    train_input += data['validation']['text']
+
+val = pd.DataFrame(pool.map(preproc, val_input))
 val.to_csv('validation.csv', index=False, header=False)
 
 print("SAVED EVAL SET")
