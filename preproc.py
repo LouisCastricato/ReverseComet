@@ -29,7 +29,9 @@ def preproc(inp):
         src = "None"
     return [src, tgt]
 #Double up the lists, since its randomly sampled we should get zero overlap
-train_input = data['train']['text'] + data['train']['text']
+train_input = data['train']['text']
+for i in range(13):
+    train_input += data['train']['text']
 
 pool = multiprocessing.Pool(processes=8)
 train = pd.DataFrame(pool.map(preproc, train_input))

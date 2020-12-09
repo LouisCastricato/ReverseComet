@@ -73,7 +73,7 @@ if not args.eval:
 
     training_args = Seq2SeqTrainingArguments()
     #training_args.max_steps *= 3
-    training_args.per_device_train_batch_size = 2
+    training_args.per_device_train_batch_size = 6
     training_args.fp16_opt_level = "O2"
     training_args.fp16 = True
     training_args.gradient_accumulation_steps = 3
