@@ -31,7 +31,7 @@ def preproc(inp):
 
 def preproc_from_sents(inp):
     try:
-        txt = inp
+        txt = inp[10:-30]
         n_sent = len(txt)
         n_start = np.random.randint(low = min(10, n_sent), high = n_sent)
         n_length = np.random.randint(low = min(3, n_sent), high = min(15, n_sent))
@@ -53,7 +53,7 @@ def preproc_from_sents(inp):
 train_input = data['train']['text']
 pool = multiprocessing.Pool(processes=8)
 print(" TOKENIZING ")
-train_sent_tokenized = pool.map(lambda x: sent_tokenize(x)[10:-30], train_input)
+train_sent_tokenized = pool.map(sent_tokenize, train_input)
 
 print(" RANDOMIZING ")
 train_df = None
