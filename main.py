@@ -57,7 +57,7 @@ args = parser.parse_args()
 model_name = args.model
 
 #Download models
-tokenizer =  BartTokenizer.from_pretrained("facebook/bart-base")
+tokenizer =  BartTokenizer.from_pretrained("facebook/bart-large")
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
 
