@@ -47,7 +47,6 @@ class Seq2SeqTrainingArguments(TrainingArguments):
         self.lr_scheduler = "linear"
         self.output_dir = "./result"
         self.logging_dir = "./logging"
-        self.fp16 = True
 @dataclass
 class DataTrainingArguments:
     """
