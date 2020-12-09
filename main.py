@@ -73,7 +73,7 @@ data_args = DataTrainingArguments()
 trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
     train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
     data_collator=Seq2SeqDataCollator(tokenizer, data_args, 4))
-trainer.args.max_steps *= 3
+trainer.args.fp16 = True
 trainer.train(
     model_path="output.model"
 )
