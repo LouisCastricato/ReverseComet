@@ -44,44 +44,58 @@ class ReverseCometDataset(Dataset):
         sample = {'src_texts': src, 'tgt_texts': tgt}
 
         return sample
-model_name = 'facebook/bart-large'
+
+#Model args, should enable fp16
+parser = argparse.ArgumentParser()
+parser.add_argument("--eval", action="store_false")
+#If this is not bart-base or bart-large, assume load from file
+parser.add_argument("--model", type=str, default="facebook/bart-base")
+parser.add_argument("--eval_file", type=str, default="query.txt")
+args = parser.parse_args()
+
+
+model_name = args.model
 
 #Download models
 tokenizer =  BartTokenizer.from_pretrained(model_name)
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
-#Model args, should enable fp16
-#parser = argparse.ArgumentParser()
-#parser = model.add_model_specific_args(parser, os.getcwd())
-#args = parser.parse_args()
 
 
 #Add the tokens above
 tokenizer.add_tokens(list(special_tokens_dict.values()))
 model.resize_token_embeddings(len(tokenizer))
+if not args.eval:
+    #Set up datasets
+    config = model.config
+    train_dataset = ReverseCometDataset(tokenizer)
+    eval_dataset = ReverseCometDataset(tokenizer, "validation")
 
-#Set up datasets
-config = model.config
-train_dataset = ReverseCometDataset(tokenizer)
-eval_dataset = ReverseCometDataset(tokenizer, "validation")
-
-training_args = Seq2SeqTrainingArguments()
-#training_args.max_steps *= 3
-training_args.per_device_train_batch_size = 2
-training_args.fp16_opt_level = "O2"
-training_args.fp16 = True
-training_args.gradient_accumulation_steps = 3
+    training_args = Seq2SeqTrainingArguments()
+    #training_args.max_steps *= 3
+    training_args.per_device_train_batch_size = 2
+    training_args.fp16_opt_level = "O2"
+    training_args.fp16 = True
+    training_args.gradient_accumulation_steps = 3
 
 
-data_args = DataTrainingArguments()
-trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
-    train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
-    data_collator=Seq2SeqDataCollator(tokenizer, data_args, 4))
-trainer.args.fp16 = True
-trainer.train(
-    model_path="output.model"
-)
-trainer.save_model()
+    data_args = DataTrainingArguments()
+    trainer = Seq2SeqTrainer(config=config, model=model, compute_metrics=None,\
+        train_dataset=train_dataset, eval_dataset=eval_dataset, args=training_args, data_args=data_args,\
+        data_collator=Seq2SeqDataCollator(tokenizer, data_args, 4))
+    trainer.args.fp16 = True
+    trainer.train(
+        model_path="output.model"
+    )
+    trainer.save_model()
+else:
+    f = open(args.eval_file, 'r')
+    input_str = f.read()
+    f.close()
+    model.to("cuda:0")
+    inputs = tokenizer([input_str], max_length=1024, return_tensors='pt').to('cuda:0')
+    beam_outputs = model.generate(inputs['input_ids'], num_beams=5)
+    print(tokenizer.decode(beam_outputs))
 '''
 for i in range(0, 35):
     print(list(data["dev"].keys())[i])
