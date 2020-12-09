@@ -51,9 +51,9 @@ tokenizer =  BartTokenizer.from_pretrained(model_name)
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
 #Model args, should enable fp16
-parser = argparse.ArgumentParser()
-parser = model.add_model_specific_args(parser, os.getcwd())
-args = parser.parse_args()
+#parser = argparse.ArgumentParser()
+#parser = model.add_model_specific_args(parser, os.getcwd())
+#args = parser.parse_args()
 
 
 #Add the tokens above
