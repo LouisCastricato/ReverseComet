@@ -39,7 +39,7 @@ class ReverseCometDataset(Dataset):
             idx = idx.tolist()
         
         tgt = self.data[idx][1]
-        src = self.data[idx][0][:len(" <pmpt> ")]
+        src = self.data[idx][0][:-len(" <pmpt> ")]
 
         sample = {'src_texts': src, 'tgt_texts': tgt}
 
