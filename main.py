@@ -4,52 +4,22 @@ from seq2seq_trainer import *
 import torch
 from torch.utils.data import Dataset, DataLoader
 from config import *
-import random
-from nltk.tokenize import sent_tokenize
-import numpy.random
-import csv
 import argparse
-import os
 
-data = None
+from datasets import *
 
-import functools
-import operator
-foldl = lambda func, acc, xs: functools.reduce(func, xs, acc)
+map_file = 'NarrativeQA_map.csv'
+summaries_file = 'narrativeqa-master/third_party/wikipedia/summaries.csv'
+
 
 
 special_tokens_dict = {'prompt' : '<pmpt>'}
-
-def findOccurrences(s, ch):
-    return [i for i, letter in enumerate(s) if letter == ch]
-
-class ReverseCometDataset(Dataset):
-    def __init__(self, tokenizer, p_type = 'train'):
-        with open(p_type + ".csv", "r") as f:
-            self.data = list(csv.reader(f))
-
-        self.p_type = p_type
-        self.tokenizer = tokenizer 
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, idx):
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
-        
-        tgt = self.data[idx][1]
-        src = self.data[idx][0][:-len(" <pmpt> ")]
-
-        sample = {'src_texts': src, 'tgt_texts': tgt}
-
-        return sample
 
 #Model args, should enable fp16
 parser = argparse.ArgumentParser()
 parser.add_argument("--eval", action="store_true", default=False)
 #If this is not bart-base or bart-large, assume load from file
-parser.add_argument("--model", type=str, default="facebook/bart-base")
+parser.add_argument("--model", type=str, default="yjernite/bart_eli5")
 parser.add_argument("--eval_file", type=str, default="query.txt")
 args = parser.parse_args()
 
@@ -57,7 +27,7 @@ args = parser.parse_args()
 model_name = args.model
 
 #Download models
-tokenizer =  BartTokenizer.from_pretrained("facebook/bart-large")
+tokenizer =  BartTokenizer.from_pretrained("yjernite/bart_eli5")
 model = BartForConditionalGeneration.from_pretrained(model_name)
 
 
@@ -68,13 +38,12 @@ model.resize_token_embeddings(len(tokenizer))
 if not args.eval:
     #Set up datasets
     config = model.config
-    train_dataset = ReverseCometDataset(tokenizer)
-    eval_dataset = ReverseCometDataset(tokenizer, "validation")
+    train_dataset = NarrativeQASummariesDataset(summaries_file=summaries_file, map_file=map_file)
+    eval_dataset = None
 
     training_args = Seq2SeqTrainingArguments()
     #training_args.max_steps *= 3
     training_args.per_device_train_batch_size = 2
-    training_args.fp16_opt_level = "O2"
     training_args.fp16 = True
     training_args.gradient_accumulation_steps = 3
     training_args.save_steps = 1000

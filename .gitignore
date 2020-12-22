@@ -130,3 +130,26 @@ dmypy.json
 
 events.*
 result/
+__MACOSX/._narrativeqa-master
+__MACOSX/narrativeqa-master/._compare.sh
+__MACOSX/narrativeqa-master/._documents.csv
+__MACOSX/narrativeqa-master/._download_stories.sh
+__MACOSX/narrativeqa-master/._LICENSE
+__MACOSX/narrativeqa-master/._qaps.csv
+__MACOSX/narrativeqa-master/._README.md
+__MACOSX/narrativeqa-master/._third_party
+__MACOSX/narrativeqa-master/third_party/._wikipedia
+__MACOSX/narrativeqa-master/third_party/wikipedia/._ATTRIBUTION
+__MACOSX/narrativeqa-master/third_party/wikipedia/._LICENSE
+__MACOSX/narrativeqa-master/third_party/wikipedia/._summaries.csv
+narrativeqa-master/compare.sh
+narrativeqa-master/documents.csv
+narrativeqa-master/download_stories.sh
+narrativeqa-master/LICENSE
+narrativeqa-master/qaps.csv
+narrativeqa-master/README.md
+narrativeqa-master/third_party/wikipedia/ATTRIBUTION
+narrativeqa-master/third_party/wikipedia/LICENSE
+narrativeqa-master/third_party/wikipedia/summaries.csv
+NarrativeQA_map.csv
+narrativeqa-master.zip
