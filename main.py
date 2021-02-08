@@ -63,9 +63,20 @@ else:
     input_str = f.read()
     f.close()
     model.to("cuda:0")
+    story = tokenizer.encode(input_str.split("context:")[1])
     inputs = tokenizer([input_str], max_length=1024, return_tensors='pt').to('cuda:0')
-    beam_outputs = model.generate(inputs['input_ids'], num_beams=5)
-    print(tokenizer.decode(beam_outputs))
+    beam_outputs = model.generate(inputs['input_ids'], 
+    num_beams=5, 
+    early_stopping=True,
+    no_repeat_ngram_size=3, 
+    max_length=20, 
+    repetition_penalty=2.0, 
+    #length_penalty=2.0,
+    num_return_sequences=5,
+    horizon_text=story)
+
+    for beam in beam_outputs:
+      print(tokenizer.decode(beam, skip_special_tokens=True))
 '''
 for i in range(0, 35):
     print(list(data["dev"].keys())[i])
